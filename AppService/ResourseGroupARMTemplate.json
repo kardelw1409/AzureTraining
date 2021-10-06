@@ -18,12 +18,24 @@
             "defaultValue": "eshop-app-insights",
             "type": "String"
         },
+        "sites_eshop_orderitemsreserver_uks_name": {
+            "defaultValue": "eshop-orderitemsreserver-uks",
+            "type": "String"
+        },
+        "serverfarms_ASP_shoponwebtraining_9587_name": {
+            "defaultValue": "ASP-shoponwebtraining-9587",
+            "type": "String"
+        },
         "serverfarms_ASP_shoponwebtraining_97a5_name": {
             "defaultValue": "ASP-shoponwebtraining-97a5",
             "type": "String"
         },
         "serverfarms_ASP_shoponwebtraining_b1bd_name": {
             "defaultValue": "ASP-shoponwebtraining-b1bd",
+            "type": "String"
+        },
+        "storageAccounts_storageaccountshopob937_name": {
+            "defaultValue": "storageaccountshopob937",
             "type": "String"
         },
         "trafficManagerProfiles_eshop_traffic_manager_name": {
@@ -91,6 +103,65 @@
                 "IngestionMode": "LogAnalytics",
                 "publicNetworkAccessForIngestion": "Enabled",
                 "publicNetworkAccessForQuery": "Enabled"
+            }
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts",
+            "apiVersion": "2021-04-01",
+            "name": "[parameters('storageAccounts_storageaccountshopob937_name')]",
+            "location": "uksouth",
+            "sku": {
+                "name": "Standard_LRS",
+                "tier": "Standard"
+            },
+            "kind": "Storage",
+            "properties": {
+                "minimumTlsVersion": "TLS1_2",
+                "networkAcls": {
+                    "bypass": "AzureServices",
+                    "virtualNetworkRules": [],
+                    "ipRules": [],
+                    "defaultAction": "Allow"
+                },
+                "supportsHttpsTrafficOnly": true,
+                "encryption": {
+                    "services": {
+                        "file": {
+                            "keyType": "Account",
+                            "enabled": true
+                        },
+                        "blob": {
+                            "keyType": "Account",
+                            "enabled": true
+                        }
+                    },
+                    "keySource": "Microsoft.Storage"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Web/serverfarms",
+            "apiVersion": "2021-01-15",
+            "name": "[parameters('serverfarms_ASP_shoponwebtraining_9587_name')]",
+            "location": "UK South",
+            "sku": {
+                "name": "Y1",
+                "tier": "Dynamic",
+                "size": "Y1",
+                "family": "Y",
+                "capacity": 0
+            },
+            "kind": "functionapp",
+            "properties": {
+                "perSiteScaling": false,
+                "elasticScaleEnabled": false,
+                "maximumElasticWorkerCount": 1,
+                "isSpot": false,
+                "reserved": false,
+                "isXenon": false,
+                "hyperV": false,
+                "targetWorkerCount": 0,
+                "targetWorkerSizeId": 0
             }
         },
         {
@@ -525,6 +596,125 @@
             }
         },
         {
+            "type": "Microsoft.Storage/storageAccounts/blobServices",
+            "apiVersion": "2021-04-01",
+            "name": "[concat(parameters('storageAccounts_storageaccountshopob937_name'), '/default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_storageaccountshopob937_name'))]"
+            ],
+            "sku": {
+                "name": "Standard_LRS",
+                "tier": "Standard"
+            },
+            "properties": {
+                "cors": {
+                    "corsRules": []
+                },
+                "deleteRetentionPolicy": {
+                    "enabled": false
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts/fileServices",
+            "apiVersion": "2021-04-01",
+            "name": "[concat(parameters('storageAccounts_storageaccountshopob937_name'), '/default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_storageaccountshopob937_name'))]"
+            ],
+            "sku": {
+                "name": "Standard_LRS",
+                "tier": "Standard"
+            },
+            "properties": {
+                "protocolSettings": {
+                    "smb": {}
+                },
+                "cors": {
+                    "corsRules": []
+                },
+                "shareDeleteRetentionPolicy": {
+                    "enabled": true,
+                    "days": 7
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts/queueServices",
+            "apiVersion": "2021-04-01",
+            "name": "[concat(parameters('storageAccounts_storageaccountshopob937_name'), '/default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_storageaccountshopob937_name'))]"
+            ],
+            "properties": {
+                "cors": {
+                    "corsRules": []
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts/tableServices",
+            "apiVersion": "2021-04-01",
+            "name": "[concat(parameters('storageAccounts_storageaccountshopob937_name'), '/default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_storageaccountshopob937_name'))]"
+            ],
+            "properties": {
+                "cors": {
+                    "corsRules": []
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites",
+            "apiVersion": "2021-01-15",
+            "name": "[parameters('sites_eshop_orderitemsreserver_uks_name')]",
+            "location": "UK South",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_ASP_shoponwebtraining_9587_name'))]"
+            ],
+            "kind": "functionapp",
+            "properties": {
+                "enabled": true,
+                "hostNameSslStates": [
+                    {
+                        "name": "[concat(parameters('sites_eshop_orderitemsreserver_uks_name'), '.azurewebsites.net')]",
+                        "sslState": "Disabled",
+                        "hostType": "Standard"
+                    },
+                    {
+                        "name": "[concat(parameters('sites_eshop_orderitemsreserver_uks_name'), '.scm.azurewebsites.net')]",
+                        "sslState": "Disabled",
+                        "hostType": "Repository"
+                    }
+                ],
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_ASP_shoponwebtraining_9587_name'))]",
+                "reserved": false,
+                "isXenon": false,
+                "hyperV": false,
+                "siteConfig": {
+                    "numberOfWorkers": 1,
+                    "acrUseManagedIdentityCreds": false,
+                    "alwaysOn": false,
+                    "http20Enabled": false,
+                    "functionAppScaleLimit": 200,
+                    "minimumElasticInstanceCount": 0
+                },
+                "scmSiteAlsoStopped": false,
+                "clientAffinityEnabled": false,
+                "clientCertEnabled": false,
+                "clientCertMode": "Required",
+                "hostNamesDisabled": false,
+                "customDomainVerificationId": "B11A56FB1B63631E6BEA0EB7786AACCD6E1D70943D1F5C0595D4887B97AA3C8B",
+                "containerSize": 1536,
+                "dailyMemoryTimeQuota": 0,
+                "httpsOnly": false,
+                "redundancyMode": "None",
+                "storageAccountRequired": false,
+                "keyVaultReferenceIdentity": "SystemAssigned"
+            }
+        },
+        {
             "type": "Microsoft.Web/sites",
             "apiVersion": "2021-01-15",
             "name": "[parameters('sites_eshop_public_api_uks_name')]",
@@ -586,11 +776,6 @@
                 "enabled": true,
                 "hostNameSslStates": [
                     {
-                        "name": "eshop-traffic-manager.trafficmanager.net",
-                        "sslState": "Disabled",
-                        "hostType": "Standard"
-                    },
-                    {
                         "name": "[concat(parameters('sites_eshop_web_cus_name'), '.azurewebsites.net')]",
                         "sslState": "Disabled",
                         "hostType": "Standard"
@@ -640,6 +825,11 @@
                 "enabled": true,
                 "hostNameSslStates": [
                     {
+                        "name": "eshop-traffic-manager.trafficmanager.net",
+                        "sslState": "Disabled",
+                        "hostType": "Standard"
+                    },
+                    {
                         "name": "[concat(parameters('sites_eshop_web_uks_name'), '.azurewebsites.net')]",
                         "sslState": "Disabled",
                         "hostType": "Standard"
@@ -674,6 +864,18 @@
                 "redundancyMode": "None",
                 "storageAccountRequired": false,
                 "keyVaultReferenceIdentity": "SystemAssigned"
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/basicPublishingCredentialsPolicies",
+            "apiVersion": "2021-01-15",
+            "name": "[concat(parameters('sites_eshop_orderitemsreserver_uks_name'), '/ftp')]",
+            "location": "UK South",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_eshop_orderitemsreserver_uks_name'))]"
+            ],
+            "properties": {
+                "allow": true
             }
         },
         {
@@ -715,6 +917,18 @@
         {
             "type": "Microsoft.Web/sites/basicPublishingCredentialsPolicies",
             "apiVersion": "2021-01-15",
+            "name": "[concat(parameters('sites_eshop_orderitemsreserver_uks_name'), '/scm')]",
+            "location": "UK South",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_eshop_orderitemsreserver_uks_name'))]"
+            ],
+            "properties": {
+                "allow": true
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/basicPublishingCredentialsPolicies",
+            "apiVersion": "2021-01-15",
             "name": "[concat(parameters('sites_eshop_public_api_uks_name'), '/scm')]",
             "location": "UK South",
             "dependsOn": [
@@ -746,6 +960,85 @@
             ],
             "properties": {
                 "allow": true
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/config",
+            "apiVersion": "2021-01-15",
+            "name": "[concat(parameters('sites_eshop_orderitemsreserver_uks_name'), '/web')]",
+            "location": "UK South",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_eshop_orderitemsreserver_uks_name'))]"
+            ],
+            "properties": {
+                "numberOfWorkers": 1,
+                "defaultDocuments": [
+                    "Default.htm",
+                    "Default.html",
+                    "Default.asp",
+                    "index.htm",
+                    "index.html",
+                    "iisstart.htm",
+                    "default.aspx",
+                    "index.php"
+                ],
+                "netFrameworkVersion": "v4.0",
+                "phpVersion": "5.6",
+                "requestTracingEnabled": false,
+                "remoteDebuggingEnabled": false,
+                "httpLoggingEnabled": false,
+                "acrUseManagedIdentityCreds": false,
+                "logsDirectorySizeLimit": 35,
+                "detailedErrorLoggingEnabled": false,
+                "publishingUsername": "$eshop-orderitemsreserver-uks",
+                "scmType": "None",
+                "use32BitWorkerProcess": true,
+                "webSocketsEnabled": false,
+                "alwaysOn": false,
+                "managedPipelineMode": "Integrated",
+                "virtualApplications": [
+                    {
+                        "virtualPath": "/",
+                        "physicalPath": "site\\wwwroot",
+                        "preloadEnabled": false
+                    }
+                ],
+                "loadBalancing": "LeastRequests",
+                "experiments": {
+                    "rampUpRules": []
+                },
+                "autoHealEnabled": false,
+                "vnetRouteAllEnabled": false,
+                "vnetPrivatePortsCount": 0,
+                "localMySqlEnabled": false,
+                "ipSecurityRestrictions": [
+                    {
+                        "ipAddress": "Any",
+                        "action": "Allow",
+                        "priority": 1,
+                        "name": "Allow all",
+                        "description": "Allow all access"
+                    }
+                ],
+                "scmIpSecurityRestrictions": [
+                    {
+                        "ipAddress": "Any",
+                        "action": "Allow",
+                        "priority": 1,
+                        "name": "Allow all",
+                        "description": "Allow all access"
+                    }
+                ],
+                "scmIpSecurityRestrictionsUseMain": false,
+                "http20Enabled": false,
+                "minTlsVersion": "1.2",
+                "scmMinTlsVersion": "1.0",
+                "ftpsState": "AllAllowed",
+                "preWarmedInstanceCount": 0,
+                "functionAppScaleLimit": 200,
+                "functionsRuntimeScaleMonitoringEnabled": false,
+                "minimumElasticInstanceCount": 0,
+                "azureStorageAccounts": {}
             }
         },
         {
@@ -994,6 +1287,19 @@
         {
             "type": "Microsoft.Web/sites/hostNameBindings",
             "apiVersion": "2021-01-15",
+            "name": "[concat(parameters('sites_eshop_orderitemsreserver_uks_name'), '/', parameters('sites_eshop_orderitemsreserver_uks_name'), '.azurewebsites.net')]",
+            "location": "UK South",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_eshop_orderitemsreserver_uks_name'))]"
+            ],
+            "properties": {
+                "siteName": "eshop-orderitemsreserver-uks",
+                "hostNameType": "Verified"
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/hostNameBindings",
+            "apiVersion": "2021-01-15",
             "name": "[concat(parameters('sites_eshop_public_api_uks_name'), '/', parameters('sites_eshop_public_api_uks_name'), '.azurewebsites.net')]",
             "location": "UK South",
             "dependsOn": [
@@ -1007,13 +1313,13 @@
         {
             "type": "Microsoft.Web/sites/hostNameBindings",
             "apiVersion": "2021-01-15",
-            "name": "[concat(parameters('sites_eshop_web_cus_name'), '/eshop-traffic-manager.trafficmanager.net')]",
-            "location": "Central US",
+            "name": "[concat(parameters('sites_eshop_web_uks_name'), '/eshop-traffic-manager.trafficmanager.net')]",
+            "location": "UK South",
             "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_eshop_web_cus_name'))]"
+                "[resourceId('Microsoft.Web/sites', parameters('sites_eshop_web_uks_name'))]"
             ],
             "properties": {
-                "siteName": "eshop-web-cus",
+                "siteName": "eshop-web-uks",
                 "hostNameType": "Verified"
             }
         },
@@ -1042,30 +1348,6 @@
                 "siteName": "eshop-web-uks",
                 "hostNameType": "Verified"
             }
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_eshop_web_cus_name'), '/2021-09-29T14_37_06_8460256')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_eshop_web_cus_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_eshop_public_api_uks_name'), '/2021-09-29T14_49_20_1564622')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_eshop_public_api_uks_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_eshop_web_uks_name'), '/2021-09-29T14_49_20_1564622')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_eshop_web_uks_name'))]"
-            ]
         },
         {
             "type": "Microsoft.Network/trafficManagerProfiles",
@@ -1135,6 +1417,54 @@
                     }
                 ],
                 "trafficViewEnrollmentStatus": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
+            "apiVersion": "2021-04-01",
+            "name": "[concat(parameters('storageAccounts_storageaccountshopob937_name'), '/default/azure-webjobs-hosts')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts/blobServices', parameters('storageAccounts_storageaccountshopob937_name'), 'default')]",
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_storageaccountshopob937_name'))]"
+            ],
+            "properties": {
+                "immutableStorageWithVersioning": {
+                    "enabled": false
+                },
+                "defaultEncryptionScope": "$account-encryption-key",
+                "denyEncryptionScopeOverride": false,
+                "publicAccess": "None"
+            }
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
+            "apiVersion": "2021-04-01",
+            "name": "[concat(parameters('storageAccounts_storageaccountshopob937_name'), '/default/azure-webjobs-secrets')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts/blobServices', parameters('storageAccounts_storageaccountshopob937_name'), 'default')]",
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_storageaccountshopob937_name'))]"
+            ],
+            "properties": {
+                "immutableStorageWithVersioning": {
+                    "enabled": false
+                },
+                "defaultEncryptionScope": "$account-encryption-key",
+                "denyEncryptionScopeOverride": false,
+                "publicAccess": "None"
+            }
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts/fileServices/shares",
+            "apiVersion": "2021-04-01",
+            "name": "[concat(parameters('storageAccounts_storageaccountshopob937_name'), '/default/eshop-orderitemsreserver-uksb33b')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts/fileServices', parameters('storageAccounts_storageaccountshopob937_name'), 'default')]",
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_storageaccountshopob937_name'))]"
+            ],
+            "properties": {
+                "accessTier": "TransactionOptimized",
+                "shareQuota": 5120,
+                "enabledProtocols": "SMB"
             }
         },
         {
@@ -1480,24 +1810,6 @@
                 "siteName": "eshop-web-cus(dev)",
                 "hostNameType": "Verified"
             }
-        },
-        {
-            "type": "Microsoft.Web/sites/slots/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_eshop_web_cus_name'), '/dev/2021-09-29T14_37_06_8460256')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites/slots', parameters('sites_eshop_web_cus_name'), 'dev')]",
-                "[resourceId('Microsoft.Web/sites', parameters('sites_eshop_web_cus_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/slots/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_eshop_public_api_uks_name'), '/dev/2021-09-29T14_49_20_1564622')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites/slots', parameters('sites_eshop_public_api_uks_name'), 'dev')]",
-                "[resourceId('Microsoft.Web/sites', parameters('sites_eshop_public_api_uks_name'))]"
-            ]
         }
     ]
 }

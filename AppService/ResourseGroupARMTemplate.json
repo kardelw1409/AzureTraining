@@ -14,12 +14,24 @@
             "defaultValue": "eshop-public-api-uks",
             "type": "String"
         },
+        "servers_eshop_sqlserver_uks_name": {
+            "defaultValue": "eshop-sqlserver-uks",
+            "type": "String"
+        },
         "components_eshop_app_insights_name": {
             "defaultValue": "eshop-app-insights",
             "type": "String"
         },
         "sites_eshop_orderitemsreserver_uks_name": {
             "defaultValue": "eshop-orderitemsreserver-uks",
+            "type": "String"
+        },
+        "databaseAccounts_eshop_cosmosdb_name": {
+            "defaultValue": "eshop-cosmosdb",
+            "type": "String"
+        },
+        "storageAccounts_sqlvaiw6ij5x6mkuga_name": {
+            "defaultValue": "sqlvaiw6ij5x6mkuga",
             "type": "String"
         },
         "serverfarms_ASP_shoponwebtraining_9587_name": {
@@ -32,6 +44,18 @@
         },
         "serverfarms_ASP_shoponwebtraining_b1bd_name": {
             "defaultValue": "ASP-shoponwebtraining-b1bd",
+            "type": "String"
+        },
+        "serverfarms_ASP_shoponwebtraining_bc25_name": {
+            "defaultValue": "ASP-shoponwebtraining-bc25",
+            "type": "String"
+        },
+        "sites_eshop_deliveryorderprocessor_uks_name": {
+            "defaultValue": "eshop-deliveryorderprocessor-uks",
+            "type": "String"
+        },
+        "storageAccounts_storageaccountshopo8de6_name": {
+            "defaultValue": "storageaccountshopo8de6",
             "type": "String"
         },
         "storageAccounts_storageaccountshopob937_name": {
@@ -50,6 +74,10 @@
             "defaultValue": "ASP-shoponwebtraining-97a5-Autoscale-343",
             "type": "String"
         },
+        "workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name": {
+            "defaultValue": "defaultworkspace-7988b774-962b-437e-b04d-6107fa39ffba-suk",
+            "type": "String"
+        },
         "workspaces_DefaultWorkspace_7988b774_962b_437e_b04d_6107fa39ffba_SUK_externalid": {
             "defaultValue": "/subscriptions/7988b774-962b-437e-b04d-6107fa39ffba/resourceGroups/DefaultResourceGroup-SUK/providers/Microsoft.OperationalInsights/workspaces/DefaultWorkspace-7988b774-962b-437e-b04d-6107fa39ffba-SUK",
             "type": "String"
@@ -57,6 +85,61 @@
     },
     "variables": {},
     "resources": [
+        {
+            "type": "Microsoft.DocumentDB/databaseAccounts",
+            "apiVersion": "2021-06-15",
+            "name": "[parameters('databaseAccounts_eshop_cosmosdb_name')]",
+            "location": "UK South",
+            "tags": {
+                "defaultExperience": "Core (SQL)",
+                "hidden-cosmos-mmspecial": ""
+            },
+            "kind": "GlobalDocumentDB",
+            "identity": {
+                "type": "None"
+            },
+            "properties": {
+                "publicNetworkAccess": "Enabled",
+                "enableAutomaticFailover": false,
+                "enableMultipleWriteLocations": false,
+                "isVirtualNetworkFilterEnabled": false,
+                "virtualNetworkRules": [],
+                "disableKeyBasedMetadataWriteAccess": false,
+                "enableFreeTier": true,
+                "enableAnalyticalStorage": false,
+                "analyticalStorageConfiguration": {
+                    "schemaType": "WellDefined"
+                },
+                "databaseAccountOfferType": "Standard",
+                "defaultIdentity": "FirstPartyIdentity",
+                "networkAclBypass": "None",
+                "disableLocalAuth": false,
+                "consistencyPolicy": {
+                    "defaultConsistencyLevel": "Session",
+                    "maxIntervalInSeconds": 5,
+                    "maxStalenessPrefix": 100
+                },
+                "locations": [
+                    {
+                        "locationName": "UK South",
+                        "provisioningState": "Succeeded",
+                        "failoverPriority": 0,
+                        "isZoneRedundant": false
+                    }
+                ],
+                "cors": [],
+                "capabilities": [],
+                "ipRules": [],
+                "backupPolicy": {
+                    "type": "Periodic",
+                    "periodicModeProperties": {
+                        "backupIntervalInMinutes": 240,
+                        "backupRetentionIntervalInHours": 8
+                    }
+                },
+                "networkAclBypassResourceIds": []
+            }
+        },
         {
             "type": "microsoft.insights/actionGroups",
             "apiVersion": "2019-06-01",
@@ -103,6 +186,119 @@
                 "IngestionMode": "LogAnalytics",
                 "publicNetworkAccessForIngestion": "Enabled",
                 "publicNetworkAccessForQuery": "Enabled"
+            }
+        },
+        {
+            "type": "microsoft.operationalinsights/workspaces",
+            "apiVersion": "2021-06-01",
+            "name": "[parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name')]",
+            "location": "uksouth",
+            "properties": {
+                "provisioningState": "Succeeded",
+                "sku": {
+                    "name": "pergb2018"
+                },
+                "retentionInDays": 30,
+                "features": {
+                    "enableLogAccessUsingOnlyResourcePermissions": true
+                },
+                "workspaceCapping": {
+                    "dailyQuotaGb": -1
+                },
+                "publicNetworkAccessForIngestion": "Enabled",
+                "publicNetworkAccessForQuery": "Enabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers",
+            "apiVersion": "2021-02-01-preview",
+            "name": "[parameters('servers_eshop_sqlserver_uks_name')]",
+            "location": "uksouth",
+            "kind": "v12.0",
+            "properties": {
+                "administratorLogin": "CloudSA4c053ccf",
+                "version": "12.0",
+                "minimalTlsVersion": "1.2",
+                "publicNetworkAccess": "Enabled",
+                "administrators": {
+                    "administratorType": "ActiveDirectory",
+                    "principalType": "User",
+                    "login": "Valery Kardel",
+                    "sid": "d9d35ef9-9bd4-42e2-9ff6-d0866571bf45",
+                    "tenantId": "b41b72d0-4e9f-4c26-8a69-f949f367c91d",
+                    "azureADOnlyAuthentication": true
+                },
+                "restrictOutboundNetworkAccess": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts",
+            "apiVersion": "2021-04-01",
+            "name": "[parameters('storageAccounts_sqlvaiw6ij5x6mkuga_name')]",
+            "location": "uksouth",
+            "sku": {
+                "name": "Standard_LRS",
+                "tier": "Standard"
+            },
+            "kind": "StorageV2",
+            "properties": {
+                "minimumTlsVersion": "TLS1_2",
+                "allowBlobPublicAccess": false,
+                "networkAcls": {
+                    "bypass": "AzureServices",
+                    "virtualNetworkRules": [],
+                    "ipRules": [],
+                    "defaultAction": "Allow"
+                },
+                "supportsHttpsTrafficOnly": true,
+                "encryption": {
+                    "services": {
+                        "file": {
+                            "keyType": "Account",
+                            "enabled": true
+                        },
+                        "blob": {
+                            "keyType": "Account",
+                            "enabled": true
+                        }
+                    },
+                    "keySource": "Microsoft.Storage"
+                },
+                "accessTier": "Hot"
+            }
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts",
+            "apiVersion": "2021-04-01",
+            "name": "[parameters('storageAccounts_storageaccountshopo8de6_name')]",
+            "location": "uksouth",
+            "sku": {
+                "name": "Standard_LRS",
+                "tier": "Standard"
+            },
+            "kind": "Storage",
+            "properties": {
+                "minimumTlsVersion": "TLS1_2",
+                "networkAcls": {
+                    "bypass": "AzureServices",
+                    "virtualNetworkRules": [],
+                    "ipRules": [],
+                    "defaultAction": "Allow"
+                },
+                "supportsHttpsTrafficOnly": true,
+                "encryption": {
+                    "services": {
+                        "file": {
+                            "keyType": "Account",
+                            "enabled": true
+                        },
+                        "blob": {
+                            "keyType": "Account",
+                            "enabled": true
+                        }
+                    },
+                    "keySource": "Microsoft.Storage"
+                }
             }
         },
         {
@@ -212,6 +408,82 @@
                 "hyperV": false,
                 "targetWorkerCount": 0,
                 "targetWorkerSizeId": 0
+            }
+        },
+        {
+            "type": "Microsoft.Web/serverfarms",
+            "apiVersion": "2021-01-15",
+            "name": "[parameters('serverfarms_ASP_shoponwebtraining_bc25_name')]",
+            "location": "UK South",
+            "sku": {
+                "name": "Y1",
+                "tier": "Dynamic",
+                "size": "Y1",
+                "family": "Y",
+                "capacity": 0
+            },
+            "kind": "functionapp",
+            "properties": {
+                "perSiteScaling": false,
+                "elasticScaleEnabled": false,
+                "maximumElasticWorkerCount": 1,
+                "isSpot": false,
+                "reserved": false,
+                "isXenon": false,
+                "hyperV": false,
+                "targetWorkerCount": 0,
+                "targetWorkerSizeId": 0
+            }
+        },
+        {
+            "type": "Microsoft.DocumentDB/databaseAccounts/sqlRoleDefinitions",
+            "apiVersion": "2021-06-15",
+            "name": "[concat(parameters('databaseAccounts_eshop_cosmosdb_name'), '/00000000-0000-0000-0000-000000000001')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DocumentDB/databaseAccounts', parameters('databaseAccounts_eshop_cosmosdb_name'))]"
+            ],
+            "properties": {
+                "roleName": "Cosmos DB Built-in Data Reader",
+                "type": 0,
+                "assignableScopes": [
+                    "[resourceId('Microsoft.DocumentDB/databaseAccounts', parameters('databaseAccounts_eshop_cosmosdb_name'))]"
+                ],
+                "permissions": [
+                    {
+                        "dataActions": [
+                            "Microsoft.DocumentDB/databaseAccounts/readMetadata",
+                            "Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers/executeQuery",
+                            "Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers/readChangeFeed",
+                            "Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers/items/read"
+                        ],
+                        "notDataActions": []
+                    }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.DocumentDB/databaseAccounts/sqlRoleDefinitions",
+            "apiVersion": "2021-06-15",
+            "name": "[concat(parameters('databaseAccounts_eshop_cosmosdb_name'), '/00000000-0000-0000-0000-000000000002')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DocumentDB/databaseAccounts', parameters('databaseAccounts_eshop_cosmosdb_name'))]"
+            ],
+            "properties": {
+                "roleName": "Cosmos DB Built-in Data Contributor",
+                "type": 0,
+                "assignableScopes": [
+                    "[resourceId('Microsoft.DocumentDB/databaseAccounts', parameters('databaseAccounts_eshop_cosmosdb_name'))]"
+                ],
+                "permissions": [
+                    {
+                        "dataActions": [
+                            "Microsoft.DocumentDB/databaseAccounts/readMetadata",
+                            "Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers/*",
+                            "Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers/items/*"
+                        ],
+                        "notDataActions": []
+                    }
+                ]
             }
         },
         {
@@ -596,6 +868,906 @@
             }
         },
         {
+            "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+            "apiVersion": "2020-08-01",
+            "name": "[concat(parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'), '/LogManagement(', parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'), ')_General|AlphabeticallySortedComputers')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.OperationalInsights/workspaces', parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'))]"
+            ],
+            "properties": {
+                "displayName": "All Computers with their most recent data",
+                "category": "General Exploration",
+                "query": "search not(ObjectName == \"Advisor Metrics\" or ObjectName == \"ManagedSpace\") | summarize AggregatedValue = max(TimeGenerated) by Computer | limit 500000 | sort by Computer asc\r\n// Oql: NOT(ObjectName=\"Advisor Metrics\" OR ObjectName=ManagedSpace) | measure max(TimeGenerated) by Computer | top 500000 | Sort Computer // Args: {OQ: True; WorkspaceId: 00000000-0000-0000-0000-000000000000} // Settings: {PTT: True; SortI: True; SortF: True} // Version: 0.1.122",
+                "version": 2
+            }
+        },
+        {
+            "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+            "apiVersion": "2020-08-01",
+            "name": "[concat(parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'), '/LogManagement(', parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'), ')_General|dataPointsPerManagementGroup')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.OperationalInsights/workspaces', parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'))]"
+            ],
+            "properties": {
+                "displayName": "Which Management Group is generating the most data points?",
+                "category": "General Exploration",
+                "query": "search * | summarize AggregatedValue = count() by ManagementGroupName\r\n// Oql: * | Measure count() by ManagementGroupName // Args: {OQ: True; WorkspaceId: 00000000-0000-0000-0000-000000000000} // Settings: {PTT: True; SortI: True; SortF: True} // Version: 0.1.122",
+                "version": 2
+            }
+        },
+        {
+            "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+            "apiVersion": "2020-08-01",
+            "name": "[concat(parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'), '/LogManagement(', parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'), ')_General|dataTypeDistribution')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.OperationalInsights/workspaces', parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'))]"
+            ],
+            "properties": {
+                "displayName": "Distribution of data Types",
+                "category": "General Exploration",
+                "query": "search * | extend Type = $table | summarize AggregatedValue = count() by Type\r\n// Oql: * | Measure count() by Type // Args: {OQ: True; WorkspaceId: 00000000-0000-0000-0000-000000000000} // Settings: {PTT: True; SortI: True; SortF: True} // Version: 0.1.122",
+                "version": 2
+            }
+        },
+        {
+            "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+            "apiVersion": "2020-08-01",
+            "name": "[concat(parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'), '/LogManagement(', parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'), ')_General|StaleComputers')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.OperationalInsights/workspaces', parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'))]"
+            ],
+            "properties": {
+                "displayName": "Stale Computers (data older than 24 hours)",
+                "category": "General Exploration",
+                "query": "search not(ObjectName == \"Advisor Metrics\" or ObjectName == \"ManagedSpace\") | summarize lastdata = max(TimeGenerated) by Computer | limit 500000 | where lastdata < ago(24h)\r\n// Oql: NOT(ObjectName=\"Advisor Metrics\" OR ObjectName=ManagedSpace) | measure max(TimeGenerated) as lastdata by Computer | top 500000 | where lastdata < NOW-24HOURS // Args: {OQ: True; WorkspaceId: 00000000-0000-0000-0000-000000000000} // Settings: {PTT: True; SortI: True; SortF: True} // Version: 0.1.122",
+                "version": 2
+            }
+        },
+        {
+            "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+            "apiVersion": "2020-08-01",
+            "name": "[concat(parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'), '/LogManagement(', parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'), ')_LogManagement|AllEvents')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.OperationalInsights/workspaces', parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'))]"
+            ],
+            "properties": {
+                "displayName": "All Events",
+                "category": "Log Management",
+                "query": "Event | sort by TimeGenerated desc\r\n// Oql: Type=Event // Args: {OQ: True; WorkspaceId: 00000000-0000-0000-0000-000000000000} // Settings: {PTT: True; SortI: True; SortF: True} // Version: 0.1.122",
+                "version": 2
+            }
+        },
+        {
+            "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+            "apiVersion": "2020-08-01",
+            "name": "[concat(parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'), '/LogManagement(', parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'), ')_LogManagement|AllSyslog')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.OperationalInsights/workspaces', parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'))]"
+            ],
+            "properties": {
+                "displayName": "All Syslogs",
+                "category": "Log Management",
+                "query": "Syslog | sort by TimeGenerated desc\r\n// Oql: Type=Syslog // Args: {OQ: True; WorkspaceId: 00000000-0000-0000-0000-000000000000} // Settings: {PTT: True; SortI: True; SortF: True} // Version: 0.1.122",
+                "version": 2
+            }
+        },
+        {
+            "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+            "apiVersion": "2020-08-01",
+            "name": "[concat(parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'), '/LogManagement(', parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'), ')_LogManagement|AllSyslogByFacility')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.OperationalInsights/workspaces', parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'))]"
+            ],
+            "properties": {
+                "displayName": "All Syslog Records grouped by Facility",
+                "category": "Log Management",
+                "query": "Syslog | summarize AggregatedValue = count() by Facility\r\n// Oql: Type=Syslog | Measure count() by Facility // Args: {OQ: True; WorkspaceId: 00000000-0000-0000-0000-000000000000} // Settings: {PTT: True; SortI: True; SortF: True} // Version: 0.1.122",
+                "version": 2
+            }
+        },
+        {
+            "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+            "apiVersion": "2020-08-01",
+            "name": "[concat(parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'), '/LogManagement(', parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'), ')_LogManagement|AllSyslogByProcessName')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.OperationalInsights/workspaces', parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'))]"
+            ],
+            "properties": {
+                "displayName": "All Syslog Records grouped by ProcessName",
+                "category": "Log Management",
+                "query": "Syslog | summarize AggregatedValue = count() by ProcessName\r\n// Oql: Type=Syslog | Measure count() by ProcessName // Args: {OQ: True; WorkspaceId: 00000000-0000-0000-0000-000000000000} // Settings: {PTT: True; SortI: True; SortF: True} // Version: 0.1.122",
+                "version": 2
+            }
+        },
+        {
+            "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+            "apiVersion": "2020-08-01",
+            "name": "[concat(parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'), '/LogManagement(', parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'), ')_LogManagement|AllSyslogsWithErrors')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.OperationalInsights/workspaces', parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'))]"
+            ],
+            "properties": {
+                "displayName": "All Syslog Records with Errors",
+                "category": "Log Management",
+                "query": "Syslog | where SeverityLevel == \"error\" | sort by TimeGenerated desc\r\n// Oql: Type=Syslog SeverityLevel=error // Args: {OQ: True; WorkspaceId: 00000000-0000-0000-0000-000000000000} // Settings: {PTT: True; SortI: True; SortF: True} // Version: 0.1.122",
+                "version": 2
+            }
+        },
+        {
+            "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+            "apiVersion": "2020-08-01",
+            "name": "[concat(parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'), '/LogManagement(', parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'), ')_LogManagement|AverageHTTPRequestTimeByClientIPAddress')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.OperationalInsights/workspaces', parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'))]"
+            ],
+            "properties": {
+                "displayName": "Average HTTP Request time by Client IP Address",
+                "category": "Log Management",
+                "query": "search * | extend Type = $table | where Type == W3CIISLog | summarize AggregatedValue = avg(TimeTaken) by cIP\r\n// Oql: Type=W3CIISLog | Measure Avg(TimeTaken) by cIP // Args: {OQ: True; WorkspaceId: 00000000-0000-0000-0000-000000000000} // Settings: {PEF: True; SortI: True; SortF: True} // Version: 0.1.122",
+                "version": 2
+            }
+        },
+        {
+            "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+            "apiVersion": "2020-08-01",
+            "name": "[concat(parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'), '/LogManagement(', parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'), ')_LogManagement|AverageHTTPRequestTimeHTTPMethod')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.OperationalInsights/workspaces', parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'))]"
+            ],
+            "properties": {
+                "displayName": "Average HTTP Request time by HTTP Method",
+                "category": "Log Management",
+                "query": "search * | extend Type = $table | where Type == W3CIISLog | summarize AggregatedValue = avg(TimeTaken) by csMethod\r\n// Oql: Type=W3CIISLog | Measure Avg(TimeTaken) by csMethod // Args: {OQ: True; WorkspaceId: 00000000-0000-0000-0000-000000000000} // Settings: {PEF: True; SortI: True; SortF: True} // Version: 0.1.122",
+                "version": 2
+            }
+        },
+        {
+            "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+            "apiVersion": "2020-08-01",
+            "name": "[concat(parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'), '/LogManagement(', parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'), ')_LogManagement|CountIISLogEntriesClientIPAddress')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.OperationalInsights/workspaces', parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'))]"
+            ],
+            "properties": {
+                "displayName": "Count of IIS Log Entries by Client IP Address",
+                "category": "Log Management",
+                "query": "search * | extend Type = $table | where Type == W3CIISLog | summarize AggregatedValue = count() by cIP\r\n// Oql: Type=W3CIISLog | Measure count() by cIP // Args: {OQ: True; WorkspaceId: 00000000-0000-0000-0000-000000000000} // Settings: {PEF: True; SortI: True; SortF: True} // Version: 0.1.122",
+                "version": 2
+            }
+        },
+        {
+            "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+            "apiVersion": "2020-08-01",
+            "name": "[concat(parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'), '/LogManagement(', parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'), ')_LogManagement|CountIISLogEntriesHTTPRequestMethod')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.OperationalInsights/workspaces', parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'))]"
+            ],
+            "properties": {
+                "displayName": "Count of IIS Log Entries by HTTP Request Method",
+                "category": "Log Management",
+                "query": "search * | extend Type = $table | where Type == W3CIISLog | summarize AggregatedValue = count() by csMethod\r\n// Oql: Type=W3CIISLog | Measure count() by csMethod // Args: {OQ: True; WorkspaceId: 00000000-0000-0000-0000-000000000000} // Settings: {PEF: True; SortI: True; SortF: True} // Version: 0.1.122",
+                "version": 2
+            }
+        },
+        {
+            "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+            "apiVersion": "2020-08-01",
+            "name": "[concat(parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'), '/LogManagement(', parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'), ')_LogManagement|CountIISLogEntriesHTTPUserAgent')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.OperationalInsights/workspaces', parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'))]"
+            ],
+            "properties": {
+                "displayName": "Count of IIS Log Entries by HTTP User Agent",
+                "category": "Log Management",
+                "query": "search * | extend Type = $table | where Type == W3CIISLog | summarize AggregatedValue = count() by csUserAgent\r\n// Oql: Type=W3CIISLog | Measure count() by csUserAgent // Args: {OQ: True; WorkspaceId: 00000000-0000-0000-0000-000000000000} // Settings: {PEF: True; SortI: True; SortF: True} // Version: 0.1.122",
+                "version": 2
+            }
+        },
+        {
+            "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+            "apiVersion": "2020-08-01",
+            "name": "[concat(parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'), '/LogManagement(', parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'), ')_LogManagement|CountOfIISLogEntriesByHostRequestedByClient')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.OperationalInsights/workspaces', parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'))]"
+            ],
+            "properties": {
+                "displayName": "Count of IIS Log Entries by Host requested by client",
+                "category": "Log Management",
+                "query": "search * | extend Type = $table | where Type == W3CIISLog | summarize AggregatedValue = count() by csHost\r\n// Oql: Type=W3CIISLog | Measure count() by csHost // Args: {OQ: True; WorkspaceId: 00000000-0000-0000-0000-000000000000} // Settings: {PEF: True; SortI: True; SortF: True} // Version: 0.1.122",
+                "version": 2
+            }
+        },
+        {
+            "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+            "apiVersion": "2020-08-01",
+            "name": "[concat(parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'), '/LogManagement(', parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'), ')_LogManagement|CountOfIISLogEntriesByURLForHost')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.OperationalInsights/workspaces', parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'))]"
+            ],
+            "properties": {
+                "displayName": "Count of IIS Log Entries by URL for the host \"www.contoso.com\" (replace with your own)",
+                "category": "Log Management",
+                "query": "search csHost == \"www.contoso.com\" | extend Type = $table | where Type == W3CIISLog | summarize AggregatedValue = count() by csUriStem\r\n// Oql: Type=W3CIISLog csHost=\"www.contoso.com\" | Measure count() by csUriStem // Args: {OQ: True; WorkspaceId: 00000000-0000-0000-0000-000000000000} // Settings: {PEF: True; SortI: True; SortF: True} // Version: 0.1.122",
+                "version": 2
+            }
+        },
+        {
+            "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+            "apiVersion": "2020-08-01",
+            "name": "[concat(parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'), '/LogManagement(', parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'), ')_LogManagement|CountOfIISLogEntriesByURLRequestedByClient')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.OperationalInsights/workspaces', parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'))]"
+            ],
+            "properties": {
+                "displayName": "Count of IIS Log Entries by URL requested by client (without query strings)",
+                "category": "Log Management",
+                "query": "search * | extend Type = $table | where Type == W3CIISLog | summarize AggregatedValue = count() by csUriStem\r\n// Oql: Type=W3CIISLog | Measure count() by csUriStem // Args: {OQ: True; WorkspaceId: 00000000-0000-0000-0000-000000000000} // Settings: {PEF: True; SortI: True; SortF: True} // Version: 0.1.122",
+                "version": 2
+            }
+        },
+        {
+            "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+            "apiVersion": "2020-08-01",
+            "name": "[concat(parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'), '/LogManagement(', parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'), ')_LogManagement|CountOfWarningEvents')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.OperationalInsights/workspaces', parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'))]"
+            ],
+            "properties": {
+                "displayName": "Count of Events with level \"Warning\" grouped by Event ID",
+                "category": "Log Management",
+                "query": "Event | where EventLevelName == \"warning\" | summarize AggregatedValue = count() by EventID\r\n// Oql: Type=Event EventLevelName=warning | Measure count() by EventID // Args: {OQ: True; WorkspaceId: 00000000-0000-0000-0000-000000000000} // Settings: {PTT: True; SortI: True; SortF: True} // Version: 0.1.122",
+                "version": 2
+            }
+        },
+        {
+            "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+            "apiVersion": "2020-08-01",
+            "name": "[concat(parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'), '/LogManagement(', parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'), ')_LogManagement|DisplayBreakdownRespondCodes')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.OperationalInsights/workspaces', parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'))]"
+            ],
+            "properties": {
+                "displayName": "Shows breakdown of response codes",
+                "category": "Log Management",
+                "query": "search * | extend Type = $table | where Type == W3CIISLog | summarize AggregatedValue = count() by scStatus\r\n// Oql: Type=W3CIISLog | Measure count() by scStatus // Args: {OQ: True; WorkspaceId: 00000000-0000-0000-0000-000000000000} // Settings: {PEF: True; SortI: True; SortF: True} // Version: 0.1.122",
+                "version": 2
+            }
+        },
+        {
+            "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+            "apiVersion": "2020-08-01",
+            "name": "[concat(parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'), '/LogManagement(', parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'), ')_LogManagement|EventsByEventLog')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.OperationalInsights/workspaces', parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'))]"
+            ],
+            "properties": {
+                "displayName": "Count of Events grouped by Event Log",
+                "category": "Log Management",
+                "query": "Event | summarize AggregatedValue = count() by EventLog\r\n// Oql: Type=Event | Measure count() by EventLog // Args: {OQ: True; WorkspaceId: 00000000-0000-0000-0000-000000000000} // Settings: {PTT: True; SortI: True; SortF: True} // Version: 0.1.122",
+                "version": 2
+            }
+        },
+        {
+            "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+            "apiVersion": "2020-08-01",
+            "name": "[concat(parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'), '/LogManagement(', parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'), ')_LogManagement|EventsByEventsID')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.OperationalInsights/workspaces', parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'))]"
+            ],
+            "properties": {
+                "displayName": "Count of Events grouped by Event ID",
+                "category": "Log Management",
+                "query": "Event | summarize AggregatedValue = count() by EventID\r\n// Oql: Type=Event | Measure count() by EventID // Args: {OQ: True; WorkspaceId: 00000000-0000-0000-0000-000000000000} // Settings: {PTT: True; SortI: True; SortF: True} // Version: 0.1.122",
+                "version": 2
+            }
+        },
+        {
+            "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+            "apiVersion": "2020-08-01",
+            "name": "[concat(parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'), '/LogManagement(', parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'), ')_LogManagement|EventsByEventSource')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.OperationalInsights/workspaces', parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'))]"
+            ],
+            "properties": {
+                "displayName": "Count of Events grouped by Event Source",
+                "category": "Log Management",
+                "query": "Event | summarize AggregatedValue = count() by Source\r\n// Oql: Type=Event | Measure count() by Source // Args: {OQ: True; WorkspaceId: 00000000-0000-0000-0000-000000000000} // Settings: {PTT: True; SortI: True; SortF: True} // Version: 0.1.122",
+                "version": 2
+            }
+        },
+        {
+            "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+            "apiVersion": "2020-08-01",
+            "name": "[concat(parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'), '/LogManagement(', parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'), ')_LogManagement|EventsInOMBetween2000to3000')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.OperationalInsights/workspaces', parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'))]"
+            ],
+            "properties": {
+                "displayName": "Events in the Operations Manager Event Log whose Event ID is in the range between 2000 and 3000",
+                "category": "Log Management",
+                "query": "Event | where EventLog == \"Operations Manager\" and EventID >= 2000 and EventID <= 3000 | sort by TimeGenerated desc\r\n// Oql: Type=Event EventLog=\"Operations Manager\" EventID:[2000..3000] // Args: {OQ: True; WorkspaceId: 00000000-0000-0000-0000-000000000000} // Settings: {PTT: True; SortI: True; SortF: True} // Version: 0.1.122",
+                "version": 2
+            }
+        },
+        {
+            "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+            "apiVersion": "2020-08-01",
+            "name": "[concat(parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'), '/LogManagement(', parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'), ')_LogManagement|EventsWithStartedinEventID')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.OperationalInsights/workspaces', parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'))]"
+            ],
+            "properties": {
+                "displayName": "Count of Events containing the word \"started\" grouped by EventID",
+                "category": "Log Management",
+                "query": "search in (Event) \"started\" | summarize AggregatedValue = count() by EventID\r\n// Oql: Type=Event \"started\" | Measure count() by EventID // Args: {OQ: True; WorkspaceId: 00000000-0000-0000-0000-000000000000} // Settings: {PTT: True; SortI: True; SortF: True} // Version: 0.1.122",
+                "version": 2
+            }
+        },
+        {
+            "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+            "apiVersion": "2020-08-01",
+            "name": "[concat(parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'), '/LogManagement(', parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'), ')_LogManagement|FindMaximumTimeTakenForEachPage')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.OperationalInsights/workspaces', parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'))]"
+            ],
+            "properties": {
+                "displayName": "Find the maximum time taken for each page",
+                "category": "Log Management",
+                "query": "search * | extend Type = $table | where Type == W3CIISLog | summarize AggregatedValue = max(TimeTaken) by csUriStem\r\n// Oql: Type=W3CIISLog | Measure Max(TimeTaken) by csUriStem // Args: {OQ: True; WorkspaceId: 00000000-0000-0000-0000-000000000000} // Settings: {PEF: True; SortI: True; SortF: True} // Version: 0.1.122",
+                "version": 2
+            }
+        },
+        {
+            "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+            "apiVersion": "2020-08-01",
+            "name": "[concat(parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'), '/LogManagement(', parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'), ')_LogManagement|IISLogEntriesForClientIP')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.OperationalInsights/workspaces', parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'))]"
+            ],
+            "properties": {
+                "displayName": "IIS Log Entries for a specific client IP Address (replace with your own)",
+                "category": "Log Management",
+                "query": "search cIP == \"192.168.0.1\" | extend Type = $table | where Type == W3CIISLog | sort by TimeGenerated desc | project csUriStem, scBytes, csBytes, TimeTaken, scStatus\r\n// Oql: Type=W3CIISLog cIP=\"192.168.0.1\" | Select csUriStem,scBytes,csBytes,TimeTaken,scStatus // Args: {OQ: True; WorkspaceId: 00000000-0000-0000-0000-000000000000} // Settings: {PEF: True; SortI: True; SortF: True} // Version: 0.1.122",
+                "version": 2
+            }
+        },
+        {
+            "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+            "apiVersion": "2020-08-01",
+            "name": "[concat(parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'), '/LogManagement(', parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'), ')_LogManagement|ListAllIISLogEntries')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.OperationalInsights/workspaces', parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'))]"
+            ],
+            "properties": {
+                "displayName": "All IIS Log Entries",
+                "category": "Log Management",
+                "query": "search * | extend Type = $table | where Type == W3CIISLog | sort by TimeGenerated desc\r\n// Oql: Type=W3CIISLog // Args: {OQ: True; WorkspaceId: 00000000-0000-0000-0000-000000000000} // Settings: {PEF: True; SortI: True; SortF: True} // Version: 0.1.122",
+                "version": 2
+            }
+        },
+        {
+            "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+            "apiVersion": "2020-08-01",
+            "name": "[concat(parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'), '/LogManagement(', parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'), ')_LogManagement|NoOfConnectionsToOMSDKService')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.OperationalInsights/workspaces', parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'))]"
+            ],
+            "properties": {
+                "displayName": "How many connections to Operations Manager's SDK service by day",
+                "category": "Log Management",
+                "query": "Event | where EventID == 26328 and EventLog == \"Operations Manager\" | summarize AggregatedValue = count() by bin(TimeGenerated, 1d) | sort by TimeGenerated desc\r\n// Oql: Type=Event EventID=26328 EventLog=\"Operations Manager\" | Measure count() interval 1DAY // Args: {OQ: True; WorkspaceId: 00000000-0000-0000-0000-000000000000} // Settings: {PTT: True; SortI: True; SortF: True} // Version: 0.1.122",
+                "version": 2
+            }
+        },
+        {
+            "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+            "apiVersion": "2020-08-01",
+            "name": "[concat(parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'), '/LogManagement(', parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'), ')_LogManagement|ServerRestartTime')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.OperationalInsights/workspaces', parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'))]"
+            ],
+            "properties": {
+                "displayName": "When did my servers initiate restart?",
+                "category": "Log Management",
+                "query": "search in (Event) \"shutdown\" and EventLog == \"System\" and Source == \"User32\" and EventID == 1074 | sort by TimeGenerated desc | project TimeGenerated, Computer\r\n// Oql: shutdown Type=Event EventLog=System Source=User32 EventID=1074 | Select TimeGenerated,Computer // Args: {OQ: True; WorkspaceId: 00000000-0000-0000-0000-000000000000} // Settings: {PTT: True; SortI: True; SortF: True} // Version: 0.1.122",
+                "version": 2
+            }
+        },
+        {
+            "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+            "apiVersion": "2020-08-01",
+            "name": "[concat(parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'), '/LogManagement(', parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'), ')_LogManagement|Show404PagesList')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.OperationalInsights/workspaces', parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'))]"
+            ],
+            "properties": {
+                "displayName": "Shows which pages people are getting a 404 for",
+                "category": "Log Management",
+                "query": "search scStatus == 404 | extend Type = $table | where Type == W3CIISLog | summarize AggregatedValue = count() by csUriStem\r\n// Oql: Type=W3CIISLog scStatus=404 | Measure count() by csUriStem // Args: {OQ: True; WorkspaceId: 00000000-0000-0000-0000-000000000000} // Settings: {PEF: True; SortI: True; SortF: True} // Version: 0.1.122",
+                "version": 2
+            }
+        },
+        {
+            "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+            "apiVersion": "2020-08-01",
+            "name": "[concat(parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'), '/LogManagement(', parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'), ')_LogManagement|ShowServersThrowingInternalServerError')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.OperationalInsights/workspaces', parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'))]"
+            ],
+            "properties": {
+                "displayName": "Shows servers that are throwing internal server error",
+                "category": "Log Management",
+                "query": "search scStatus == 500 | extend Type = $table | where Type == W3CIISLog | summarize AggregatedValue = count() by sComputerName\r\n// Oql: Type=W3CIISLog scStatus=500 | Measure count() by sComputerName // Args: {OQ: True; WorkspaceId: 00000000-0000-0000-0000-000000000000} // Settings: {PEF: True; SortI: True; SortF: True} // Version: 0.1.122",
+                "version": 2
+            }
+        },
+        {
+            "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+            "apiVersion": "2020-08-01",
+            "name": "[concat(parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'), '/LogManagement(', parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'), ')_LogManagement|TotalBytesReceivedByEachAzureRoleInstance')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.OperationalInsights/workspaces', parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'))]"
+            ],
+            "properties": {
+                "displayName": "Total Bytes received by each Azure Role Instance",
+                "category": "Log Management",
+                "query": "search * | extend Type = $table | where Type == W3CIISLog | summarize AggregatedValue = sum(csBytes) by RoleInstance\r\n// Oql: Type=W3CIISLog | Measure Sum(csBytes) by RoleInstance // Args: {OQ: True; WorkspaceId: 00000000-0000-0000-0000-000000000000} // Settings: {PEF: True; SortI: True; SortF: True} // Version: 0.1.122",
+                "version": 2
+            }
+        },
+        {
+            "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+            "apiVersion": "2020-08-01",
+            "name": "[concat(parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'), '/LogManagement(', parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'), ')_LogManagement|TotalBytesReceivedByEachIISComputer')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.OperationalInsights/workspaces', parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'))]"
+            ],
+            "properties": {
+                "displayName": "Total Bytes received by each IIS Computer",
+                "category": "Log Management",
+                "query": "search * | extend Type = $table | where Type == W3CIISLog | summarize AggregatedValue = sum(csBytes) by Computer | limit 500000\r\n// Oql: Type=W3CIISLog | Measure Sum(csBytes) by Computer | top 500000 // Args: {OQ: True; WorkspaceId: 00000000-0000-0000-0000-000000000000} // Settings: {PEF: True; SortI: True; SortF: True} // Version: 0.1.122",
+                "version": 2
+            }
+        },
+        {
+            "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+            "apiVersion": "2020-08-01",
+            "name": "[concat(parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'), '/LogManagement(', parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'), ')_LogManagement|TotalBytesRespondedToClientsByClientIPAddress')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.OperationalInsights/workspaces', parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'))]"
+            ],
+            "properties": {
+                "displayName": "Total Bytes responded back to clients by Client IP Address",
+                "category": "Log Management",
+                "query": "search * | extend Type = $table | where Type == W3CIISLog | summarize AggregatedValue = sum(scBytes) by cIP\r\n// Oql: Type=W3CIISLog | Measure Sum(scBytes) by cIP // Args: {OQ: True; WorkspaceId: 00000000-0000-0000-0000-000000000000} // Settings: {PEF: True; SortI: True; SortF: True} // Version: 0.1.122",
+                "version": 2
+            }
+        },
+        {
+            "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+            "apiVersion": "2020-08-01",
+            "name": "[concat(parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'), '/LogManagement(', parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'), ')_LogManagement|TotalBytesRespondedToClientsByEachIISServerIPAddress')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.OperationalInsights/workspaces', parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'))]"
+            ],
+            "properties": {
+                "displayName": "Total Bytes responded back to clients by each IIS ServerIP Address",
+                "category": "Log Management",
+                "query": "search * | extend Type = $table | where Type == W3CIISLog | summarize AggregatedValue = sum(scBytes) by sIP\r\n// Oql: Type=W3CIISLog | Measure Sum(scBytes) by sIP // Args: {OQ: True; WorkspaceId: 00000000-0000-0000-0000-000000000000} // Settings: {PEF: True; SortI: True; SortF: True} // Version: 0.1.122",
+                "version": 2
+            }
+        },
+        {
+            "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+            "apiVersion": "2020-08-01",
+            "name": "[concat(parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'), '/LogManagement(', parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'), ')_LogManagement|TotalBytesSentByClientIPAddress')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.OperationalInsights/workspaces', parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'))]"
+            ],
+            "properties": {
+                "displayName": "Total Bytes sent by Client IP Address",
+                "category": "Log Management",
+                "query": "search * | extend Type = $table | where Type == W3CIISLog | summarize AggregatedValue = sum(csBytes) by cIP\r\n// Oql: Type=W3CIISLog | Measure Sum(csBytes) by cIP // Args: {OQ: True; WorkspaceId: 00000000-0000-0000-0000-000000000000} // Settings: {PEF: True; SortI: True; SortF: True} // Version: 0.1.122",
+                "version": 2
+            }
+        },
+        {
+            "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+            "apiVersion": "2020-08-01",
+            "name": "[concat(parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'), '/LogManagement(', parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'), ')_LogManagement|WarningEvents')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.OperationalInsights/workspaces', parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'))]"
+            ],
+            "properties": {
+                "displayName": "All Events with level \"Warning\"",
+                "category": "Log Management",
+                "query": "Event | where EventLevelName == \"warning\" | sort by TimeGenerated desc\r\n// Oql: Type=Event EventLevelName=warning // Args: {OQ: True; WorkspaceId: 00000000-0000-0000-0000-000000000000} // Settings: {PTT: True; SortI: True; SortF: True} // Version: 0.1.122",
+                "version": 2
+            }
+        },
+        {
+            "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+            "apiVersion": "2020-08-01",
+            "name": "[concat(parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'), '/LogManagement(', parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'), ')_LogManagement|WindowsFireawallPolicySettingsChanged')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.OperationalInsights/workspaces', parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'))]"
+            ],
+            "properties": {
+                "displayName": "Windows Firewall Policy settings have changed",
+                "category": "Log Management",
+                "query": "Event | where EventLog == \"Microsoft-Windows-Windows Firewall With Advanced Security/Firewall\" and EventID == 2008 | sort by TimeGenerated desc\r\n// Oql: Type=Event EventLog=\"Microsoft-Windows-Windows Firewall With Advanced Security/Firewall\" EventID=2008 // Args: {OQ: True; WorkspaceId: 00000000-0000-0000-0000-000000000000} // Settings: {PTT: True; SortI: True; SortF: True} // Version: 0.1.122",
+                "version": 2
+            }
+        },
+        {
+            "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+            "apiVersion": "2020-08-01",
+            "name": "[concat(parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'), '/LogManagement(', parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'), ')_LogManagement|WindowsFireawallPolicySettingsChangedByMachines')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.OperationalInsights/workspaces', parameters('workspaces_defaultworkspace_7988b774_962b_437e_b04d_6107fa39ffba_suk_name'))]"
+            ],
+            "properties": {
+                "displayName": "On which machines and how many times have Windows Firewall Policy settings changed",
+                "category": "Log Management",
+                "query": "Event | where EventLog == \"Microsoft-Windows-Windows Firewall With Advanced Security/Firewall\" and EventID == 2008 | summarize AggregatedValue = count() by Computer | limit 500000\r\n// Oql: Type=Event EventLog=\"Microsoft-Windows-Windows Firewall With Advanced Security/Firewall\" EventID=2008 | measure count() by Computer | top 500000 // Args: {OQ: True; WorkspaceId: 00000000-0000-0000-0000-000000000000} // Settings: {PTT: True; SortI: True; SortF: True} // Version: 0.1.122",
+                "version": 2
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/administrators",
+            "apiVersion": "2021-02-01-preview",
+            "name": "[concat(parameters('servers_eshop_sqlserver_uks_name'), '/ActiveDirectory')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_eshop_sqlserver_uks_name'))]"
+            ],
+            "properties": {
+                "administratorType": "ActiveDirectory",
+                "login": "Valery Kardel",
+                "sid": "d9d35ef9-9bd4-42e2-9ff6-d0866571bf45",
+                "tenantId": "b41b72d0-4e9f-4c26-8a69-f949f367c91d"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/advisors",
+            "apiVersion": "2014-04-01",
+            "name": "[concat(parameters('servers_eshop_sqlserver_uks_name'), '/CreateIndex')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_eshop_sqlserver_uks_name'))]"
+            ],
+            "properties": {
+                "autoExecuteValue": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/advisors",
+            "apiVersion": "2014-04-01",
+            "name": "[concat(parameters('servers_eshop_sqlserver_uks_name'), '/DbParameterization')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_eshop_sqlserver_uks_name'))]"
+            ],
+            "properties": {
+                "autoExecuteValue": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/advisors",
+            "apiVersion": "2014-04-01",
+            "name": "[concat(parameters('servers_eshop_sqlserver_uks_name'), '/DefragmentIndex')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_eshop_sqlserver_uks_name'))]"
+            ],
+            "properties": {
+                "autoExecuteValue": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/advisors",
+            "apiVersion": "2014-04-01",
+            "name": "[concat(parameters('servers_eshop_sqlserver_uks_name'), '/DropIndex')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_eshop_sqlserver_uks_name'))]"
+            ],
+            "properties": {
+                "autoExecuteValue": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/advisors",
+            "apiVersion": "2014-04-01",
+            "name": "[concat(parameters('servers_eshop_sqlserver_uks_name'), '/ForceLastGoodPlan')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_eshop_sqlserver_uks_name'))]"
+            ],
+            "properties": {
+                "autoExecuteValue": "Enabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/auditingPolicies",
+            "apiVersion": "2014-04-01",
+            "name": "[concat(parameters('servers_eshop_sqlserver_uks_name'), '/Default')]",
+            "location": "UK South",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_eshop_sqlserver_uks_name'))]"
+            ],
+            "properties": {
+                "auditingState": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/auditingSettings",
+            "apiVersion": "2021-02-01-preview",
+            "name": "[concat(parameters('servers_eshop_sqlserver_uks_name'), '/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_eshop_sqlserver_uks_name'))]"
+            ],
+            "properties": {
+                "retentionDays": 0,
+                "auditActionsAndGroups": [],
+                "isStorageSecondaryKeyInUse": false,
+                "isAzureMonitorTargetEnabled": false,
+                "state": "Disabled",
+                "storageAccountSubscriptionId": "00000000-0000-0000-0000-000000000000"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/azureADOnlyAuthentications",
+            "apiVersion": "2021-02-01-preview",
+            "name": "[concat(parameters('servers_eshop_sqlserver_uks_name'), '/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_eshop_sqlserver_uks_name'))]"
+            ],
+            "properties": {
+                "azureADOnlyAuthentication": true
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases",
+            "apiVersion": "2021-02-01-preview",
+            "name": "[concat(parameters('servers_eshop_sqlserver_uks_name'), '/eshop-sqldatabase-uks')]",
+            "location": "uksouth",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_eshop_sqlserver_uks_name'))]"
+            ],
+            "sku": {
+                "name": "GP_Gen5",
+                "tier": "GeneralPurpose",
+                "family": "Gen5",
+                "capacity": 2
+            },
+            "kind": "v12.0,user,vcore",
+            "properties": {
+                "collation": "SQL_Latin1_General_CP1_CI_AS",
+                "maxSizeBytes": 34359738368,
+                "catalogCollation": "SQL_Latin1_General_CP1_CI_AS",
+                "zoneRedundant": false,
+                "licenseType": "LicenseIncluded",
+                "readScale": "Disabled",
+                "requestedBackupStorageRedundancy": "Geo",
+                "maintenanceConfigurationId": "/subscriptions/7988b774-962b-437e-b04d-6107fa39ffba/providers/Microsoft.Maintenance/publicMaintenanceConfigurations/SQL_Default",
+                "isLedgerOn": false
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/auditingPolicies",
+            "apiVersion": "2014-04-01",
+            "name": "[concat(parameters('servers_eshop_sqlserver_uks_name'), '/master/Default')]",
+            "location": "UK South",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_eshop_sqlserver_uks_name'))]"
+            ],
+            "properties": {
+                "auditingState": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/auditingSettings",
+            "apiVersion": "2021-02-01-preview",
+            "name": "[concat(parameters('servers_eshop_sqlserver_uks_name'), '/master/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_eshop_sqlserver_uks_name'))]"
+            ],
+            "properties": {
+                "retentionDays": 0,
+                "isAzureMonitorTargetEnabled": false,
+                "state": "Disabled",
+                "storageAccountSubscriptionId": "00000000-0000-0000-0000-000000000000"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/extendedAuditingSettings",
+            "apiVersion": "2021-02-01-preview",
+            "name": "[concat(parameters('servers_eshop_sqlserver_uks_name'), '/master/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_eshop_sqlserver_uks_name'))]"
+            ],
+            "properties": {
+                "retentionDays": 0,
+                "isAzureMonitorTargetEnabled": false,
+                "state": "Disabled",
+                "storageAccountSubscriptionId": "00000000-0000-0000-0000-000000000000"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/geoBackupPolicies",
+            "apiVersion": "2014-04-01",
+            "name": "[concat(parameters('servers_eshop_sqlserver_uks_name'), '/master/Default')]",
+            "location": "UK South",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_eshop_sqlserver_uks_name'))]"
+            ],
+            "properties": {
+                "state": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/ledgerDigestUploads",
+            "apiVersion": "2021-02-01-preview",
+            "name": "[concat(parameters('servers_eshop_sqlserver_uks_name'), '/master/Current')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_eshop_sqlserver_uks_name'))]"
+            ],
+            "properties": {}
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/securityAlertPolicies",
+            "apiVersion": "2021-02-01-preview",
+            "name": "[concat(parameters('servers_eshop_sqlserver_uks_name'), '/master/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_eshop_sqlserver_uks_name'))]"
+            ],
+            "properties": {
+                "state": "Disabled",
+                "disabledAlerts": [
+                    ""
+                ],
+                "emailAddresses": [
+                    ""
+                ],
+                "emailAccountAdmins": false,
+                "retentionDays": 0
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/transparentDataEncryption",
+            "apiVersion": "2021-02-01-preview",
+            "name": "[concat(parameters('servers_eshop_sqlserver_uks_name'), '/master/Current')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_eshop_sqlserver_uks_name'))]"
+            ],
+            "properties": {
+                "state": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/vulnerabilityAssessments",
+            "apiVersion": "2021-02-01-preview",
+            "name": "[concat(parameters('servers_eshop_sqlserver_uks_name'), '/master/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_eshop_sqlserver_uks_name'))]"
+            ],
+            "properties": {
+                "recurringScans": {
+                    "isEnabled": false,
+                    "emailSubscriptionAdmins": true
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/devOpsAuditingSettings",
+            "apiVersion": "2021-02-01-preview",
+            "name": "[concat(parameters('servers_eshop_sqlserver_uks_name'), '/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_eshop_sqlserver_uks_name'))]"
+            ],
+            "properties": {
+                "isAzureMonitorTargetEnabled": false,
+                "state": "Disabled",
+                "storageAccountSubscriptionId": "00000000-0000-0000-0000-000000000000"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/encryptionProtector",
+            "apiVersion": "2021-02-01-preview",
+            "name": "[concat(parameters('servers_eshop_sqlserver_uks_name'), '/current')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_eshop_sqlserver_uks_name'))]"
+            ],
+            "kind": "servicemanaged",
+            "properties": {
+                "serverKeyName": "ServiceManaged",
+                "serverKeyType": "ServiceManaged",
+                "autoRotationEnabled": false
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/extendedAuditingSettings",
+            "apiVersion": "2021-02-01-preview",
+            "name": "[concat(parameters('servers_eshop_sqlserver_uks_name'), '/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_eshop_sqlserver_uks_name'))]"
+            ],
+            "properties": {
+                "retentionDays": 0,
+                "auditActionsAndGroups": [],
+                "isStorageSecondaryKeyInUse": false,
+                "isAzureMonitorTargetEnabled": false,
+                "state": "Disabled",
+                "storageAccountSubscriptionId": "00000000-0000-0000-0000-000000000000"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/keys",
+            "apiVersion": "2021-02-01-preview",
+            "name": "[concat(parameters('servers_eshop_sqlserver_uks_name'), '/ServiceManaged')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_eshop_sqlserver_uks_name'))]"
+            ],
+            "kind": "servicemanaged",
+            "properties": {
+                "serverKeyType": "ServiceManaged"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/securityAlertPolicies",
+            "apiVersion": "2021-02-01-preview",
+            "name": "[concat(parameters('servers_eshop_sqlserver_uks_name'), '/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_eshop_sqlserver_uks_name'))]"
+            ],
+            "properties": {
+                "state": "Enabled",
+                "disabledAlerts": [
+                    ""
+                ],
+                "emailAddresses": [
+                    ""
+                ],
+                "emailAccountAdmins": true,
+                "retentionDays": 0
+            }
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts/blobServices",
+            "apiVersion": "2021-04-01",
+            "name": "[concat(parameters('storageAccounts_sqlvaiw6ij5x6mkuga_name'), '/default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_sqlvaiw6ij5x6mkuga_name'))]"
+            ],
+            "sku": {
+                "name": "Standard_LRS",
+                "tier": "Standard"
+            },
+            "properties": {
+                "cors": {
+                    "corsRules": []
+                },
+                "deleteRetentionPolicy": {
+                    "enabled": false
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts/blobServices",
+            "apiVersion": "2021-04-01",
+            "name": "[concat(parameters('storageAccounts_storageaccountshopo8de6_name'), '/default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_storageaccountshopo8de6_name'))]"
+            ],
+            "sku": {
+                "name": "Standard_LRS",
+                "tier": "Standard"
+            },
+            "properties": {
+                "cors": {
+                    "corsRules": []
+                },
+                "deleteRetentionPolicy": {
+                    "enabled": false
+                }
+            }
+        },
+        {
             "type": "Microsoft.Storage/storageAccounts/blobServices",
             "apiVersion": "2021-04-01",
             "name": "[concat(parameters('storageAccounts_storageaccountshopob937_name'), '/default')]",
@@ -612,6 +1784,54 @@
                 },
                 "deleteRetentionPolicy": {
                     "enabled": false
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts/fileServices",
+            "apiVersion": "2021-04-01",
+            "name": "[concat(parameters('storageAccounts_sqlvaiw6ij5x6mkuga_name'), '/default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_sqlvaiw6ij5x6mkuga_name'))]"
+            ],
+            "sku": {
+                "name": "Standard_LRS",
+                "tier": "Standard"
+            },
+            "properties": {
+                "protocolSettings": {
+                    "smb": {}
+                },
+                "cors": {
+                    "corsRules": []
+                },
+                "shareDeleteRetentionPolicy": {
+                    "enabled": true,
+                    "days": 7
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts/fileServices",
+            "apiVersion": "2021-04-01",
+            "name": "[concat(parameters('storageAccounts_storageaccountshopo8de6_name'), '/default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_storageaccountshopo8de6_name'))]"
+            ],
+            "sku": {
+                "name": "Standard_LRS",
+                "tier": "Standard"
+            },
+            "properties": {
+                "protocolSettings": {
+                    "smb": {}
+                },
+                "cors": {
+                    "corsRules": []
+                },
+                "shareDeleteRetentionPolicy": {
+                    "enabled": true,
+                    "days": 7
                 }
             }
         },
@@ -642,9 +1862,61 @@
         {
             "type": "Microsoft.Storage/storageAccounts/queueServices",
             "apiVersion": "2021-04-01",
+            "name": "[concat(parameters('storageAccounts_sqlvaiw6ij5x6mkuga_name'), '/default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_sqlvaiw6ij5x6mkuga_name'))]"
+            ],
+            "properties": {
+                "cors": {
+                    "corsRules": []
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts/queueServices",
+            "apiVersion": "2021-04-01",
+            "name": "[concat(parameters('storageAccounts_storageaccountshopo8de6_name'), '/default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_storageaccountshopo8de6_name'))]"
+            ],
+            "properties": {
+                "cors": {
+                    "corsRules": []
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts/queueServices",
+            "apiVersion": "2021-04-01",
             "name": "[concat(parameters('storageAccounts_storageaccountshopob937_name'), '/default')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_storageaccountshopob937_name'))]"
+            ],
+            "properties": {
+                "cors": {
+                    "corsRules": []
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts/tableServices",
+            "apiVersion": "2021-04-01",
+            "name": "[concat(parameters('storageAccounts_sqlvaiw6ij5x6mkuga_name'), '/default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_sqlvaiw6ij5x6mkuga_name'))]"
+            ],
+            "properties": {
+                "cors": {
+                    "corsRules": []
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts/tableServices",
+            "apiVersion": "2021-04-01",
+            "name": "[concat(parameters('storageAccounts_storageaccountshopo8de6_name'), '/default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_storageaccountshopo8de6_name'))]"
             ],
             "properties": {
                 "cors": {
@@ -663,6 +1935,55 @@
                 "cors": {
                     "corsRules": []
                 }
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites",
+            "apiVersion": "2021-01-15",
+            "name": "[parameters('sites_eshop_deliveryorderprocessor_uks_name')]",
+            "location": "UK South",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_ASP_shoponwebtraining_bc25_name'))]"
+            ],
+            "kind": "functionapp",
+            "properties": {
+                "enabled": true,
+                "hostNameSslStates": [
+                    {
+                        "name": "[concat(parameters('sites_eshop_deliveryorderprocessor_uks_name'), '.azurewebsites.net')]",
+                        "sslState": "Disabled",
+                        "hostType": "Standard"
+                    },
+                    {
+                        "name": "[concat(parameters('sites_eshop_deliveryorderprocessor_uks_name'), '.scm.azurewebsites.net')]",
+                        "sslState": "Disabled",
+                        "hostType": "Repository"
+                    }
+                ],
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_ASP_shoponwebtraining_bc25_name'))]",
+                "reserved": false,
+                "isXenon": false,
+                "hyperV": false,
+                "siteConfig": {
+                    "numberOfWorkers": 1,
+                    "acrUseManagedIdentityCreds": false,
+                    "alwaysOn": false,
+                    "http20Enabled": false,
+                    "functionAppScaleLimit": 200,
+                    "minimumElasticInstanceCount": 0
+                },
+                "scmSiteAlsoStopped": false,
+                "clientAffinityEnabled": false,
+                "clientCertEnabled": false,
+                "clientCertMode": "Required",
+                "hostNamesDisabled": false,
+                "customDomainVerificationId": "B11A56FB1B63631E6BEA0EB7786AACCD6E1D70943D1F5C0595D4887B97AA3C8B",
+                "containerSize": 1536,
+                "dailyMemoryTimeQuota": 0,
+                "httpsOnly": false,
+                "redundancyMode": "None",
+                "storageAccountRequired": false,
+                "keyVaultReferenceIdentity": "SystemAssigned"
             }
         },
         {
@@ -698,7 +2019,7 @@
                     "alwaysOn": false,
                     "http20Enabled": false,
                     "functionAppScaleLimit": 200,
-                    "minimumElasticInstanceCount": 0
+                    "minimumElasticInstanceCount": 1
                 },
                 "scmSiteAlsoStopped": false,
                 "clientAffinityEnabled": false,
@@ -825,11 +2146,6 @@
                 "enabled": true,
                 "hostNameSslStates": [
                     {
-                        "name": "eshop-traffic-manager.trafficmanager.net",
-                        "sslState": "Disabled",
-                        "hostType": "Standard"
-                    },
-                    {
                         "name": "[concat(parameters('sites_eshop_web_uks_name'), '.azurewebsites.net')]",
                         "sslState": "Disabled",
                         "hostType": "Standard"
@@ -864,6 +2180,18 @@
                 "redundancyMode": "None",
                 "storageAccountRequired": false,
                 "keyVaultReferenceIdentity": "SystemAssigned"
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/basicPublishingCredentialsPolicies",
+            "apiVersion": "2021-01-15",
+            "name": "[concat(parameters('sites_eshop_deliveryorderprocessor_uks_name'), '/ftp')]",
+            "location": "UK South",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_eshop_deliveryorderprocessor_uks_name'))]"
+            ],
+            "properties": {
+                "allow": true
             }
         },
         {
@@ -909,6 +2237,18 @@
             "location": "UK South",
             "dependsOn": [
                 "[resourceId('Microsoft.Web/sites', parameters('sites_eshop_web_uks_name'))]"
+            ],
+            "properties": {
+                "allow": true
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/basicPublishingCredentialsPolicies",
+            "apiVersion": "2021-01-15",
+            "name": "[concat(parameters('sites_eshop_deliveryorderprocessor_uks_name'), '/scm')]",
+            "location": "UK South",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_eshop_deliveryorderprocessor_uks_name'))]"
             ],
             "properties": {
                 "allow": true
@@ -965,6 +2305,85 @@
         {
             "type": "Microsoft.Web/sites/config",
             "apiVersion": "2021-01-15",
+            "name": "[concat(parameters('sites_eshop_deliveryorderprocessor_uks_name'), '/web')]",
+            "location": "UK South",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_eshop_deliveryorderprocessor_uks_name'))]"
+            ],
+            "properties": {
+                "numberOfWorkers": 1,
+                "defaultDocuments": [
+                    "Default.htm",
+                    "Default.html",
+                    "Default.asp",
+                    "index.htm",
+                    "index.html",
+                    "iisstart.htm",
+                    "default.aspx",
+                    "index.php"
+                ],
+                "netFrameworkVersion": "v4.0",
+                "phpVersion": "5.6",
+                "requestTracingEnabled": false,
+                "remoteDebuggingEnabled": false,
+                "httpLoggingEnabled": false,
+                "acrUseManagedIdentityCreds": false,
+                "logsDirectorySizeLimit": 35,
+                "detailedErrorLoggingEnabled": false,
+                "publishingUsername": "$eshop-deliveryorderprocessor-uks",
+                "scmType": "None",
+                "use32BitWorkerProcess": true,
+                "webSocketsEnabled": false,
+                "alwaysOn": false,
+                "managedPipelineMode": "Integrated",
+                "virtualApplications": [
+                    {
+                        "virtualPath": "/",
+                        "physicalPath": "site\\wwwroot",
+                        "preloadEnabled": false
+                    }
+                ],
+                "loadBalancing": "LeastRequests",
+                "experiments": {
+                    "rampUpRules": []
+                },
+                "autoHealEnabled": false,
+                "vnetRouteAllEnabled": false,
+                "vnetPrivatePortsCount": 0,
+                "localMySqlEnabled": false,
+                "ipSecurityRestrictions": [
+                    {
+                        "ipAddress": "Any",
+                        "action": "Allow",
+                        "priority": 1,
+                        "name": "Allow all",
+                        "description": "Allow all access"
+                    }
+                ],
+                "scmIpSecurityRestrictions": [
+                    {
+                        "ipAddress": "Any",
+                        "action": "Allow",
+                        "priority": 1,
+                        "name": "Allow all",
+                        "description": "Allow all access"
+                    }
+                ],
+                "scmIpSecurityRestrictionsUseMain": false,
+                "http20Enabled": false,
+                "minTlsVersion": "1.2",
+                "scmMinTlsVersion": "1.0",
+                "ftpsState": "AllAllowed",
+                "preWarmedInstanceCount": 0,
+                "functionAppScaleLimit": 200,
+                "functionsRuntimeScaleMonitoringEnabled": false,
+                "minimumElasticInstanceCount": 0,
+                "azureStorageAccounts": {}
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/config",
+            "apiVersion": "2021-01-15",
             "name": "[concat(parameters('sites_eshop_orderitemsreserver_uks_name'), '/web')]",
             "location": "UK South",
             "dependsOn": [
@@ -986,6 +2405,7 @@
                 "phpVersion": "5.6",
                 "requestTracingEnabled": false,
                 "remoteDebuggingEnabled": false,
+                "remoteDebuggingVersion": "VS2019",
                 "httpLoggingEnabled": false,
                 "acrUseManagedIdentityCreds": false,
                 "logsDirectorySizeLimit": 35,
@@ -1037,7 +2457,7 @@
                 "preWarmedInstanceCount": 0,
                 "functionAppScaleLimit": 200,
                 "functionsRuntimeScaleMonitoringEnabled": false,
-                "minimumElasticInstanceCount": 0,
+                "minimumElasticInstanceCount": 1,
                 "azureStorageAccounts": {}
             }
         },
@@ -1287,6 +2707,19 @@
         {
             "type": "Microsoft.Web/sites/hostNameBindings",
             "apiVersion": "2021-01-15",
+            "name": "[concat(parameters('sites_eshop_deliveryorderprocessor_uks_name'), '/', parameters('sites_eshop_deliveryorderprocessor_uks_name'), '.azurewebsites.net')]",
+            "location": "UK South",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_eshop_deliveryorderprocessor_uks_name'))]"
+            ],
+            "properties": {
+                "siteName": "eshop-deliveryorderprocessor-uks",
+                "hostNameType": "Verified"
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/hostNameBindings",
+            "apiVersion": "2021-01-15",
             "name": "[concat(parameters('sites_eshop_orderitemsreserver_uks_name'), '/', parameters('sites_eshop_orderitemsreserver_uks_name'), '.azurewebsites.net')]",
             "location": "UK South",
             "dependsOn": [
@@ -1307,19 +2740,6 @@
             ],
             "properties": {
                 "siteName": "eshop-public-api-uks",
-                "hostNameType": "Verified"
-            }
-        },
-        {
-            "type": "Microsoft.Web/sites/hostNameBindings",
-            "apiVersion": "2021-01-15",
-            "name": "[concat(parameters('sites_eshop_web_uks_name'), '/eshop-traffic-manager.trafficmanager.net')]",
-            "location": "UK South",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_eshop_web_uks_name'))]"
-            ],
-            "properties": {
-                "siteName": "eshop-web-uks",
                 "hostNameType": "Verified"
             }
         },
@@ -1348,6 +2768,54 @@
                 "siteName": "eshop-web-uks",
                 "hostNameType": "Verified"
             }
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "[concat(parameters('sites_eshop_public_api_uks_name'), '/2021-10-13T14_12_51_9244058')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_eshop_public_api_uks_name'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "[concat(parameters('sites_eshop_web_uks_name'), '/2021-10-13T14_12_51_9244058')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_eshop_web_uks_name'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "[concat(parameters('sites_eshop_web_cus_name'), '/2021-10-13T14_29_33_5307909')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_eshop_web_cus_name'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "[concat(parameters('sites_eshop_public_api_uks_name'), '/2021-10-13T15_12_52_0039039')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_eshop_public_api_uks_name'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "[concat(parameters('sites_eshop_web_uks_name'), '/2021-10-13T15_12_52_0039039')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_eshop_web_uks_name'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "[concat(parameters('sites_eshop_web_cus_name'), '/2021-10-13T15_29_33_6848979')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_eshop_web_cus_name'))]"
+            ]
         },
         {
             "type": "Microsoft.Network/trafficManagerProfiles",
@@ -1420,12 +2888,265 @@
             }
         },
         {
+            "type": "Microsoft.Sql/servers/databases/advisors",
+            "apiVersion": "2014-04-01",
+            "name": "[concat(parameters('servers_eshop_sqlserver_uks_name'), '/eshop-sqldatabase-uks/CreateIndex')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_eshop_sqlserver_uks_name'), 'eshop-sqldatabase-uks')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_eshop_sqlserver_uks_name'))]"
+            ],
+            "properties": {
+                "autoExecuteValue": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/advisors",
+            "apiVersion": "2014-04-01",
+            "name": "[concat(parameters('servers_eshop_sqlserver_uks_name'), '/eshop-sqldatabase-uks/DbParameterization')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_eshop_sqlserver_uks_name'), 'eshop-sqldatabase-uks')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_eshop_sqlserver_uks_name'))]"
+            ],
+            "properties": {
+                "autoExecuteValue": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/advisors",
+            "apiVersion": "2014-04-01",
+            "name": "[concat(parameters('servers_eshop_sqlserver_uks_name'), '/eshop-sqldatabase-uks/DefragmentIndex')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_eshop_sqlserver_uks_name'), 'eshop-sqldatabase-uks')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_eshop_sqlserver_uks_name'))]"
+            ],
+            "properties": {
+                "autoExecuteValue": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/advisors",
+            "apiVersion": "2014-04-01",
+            "name": "[concat(parameters('servers_eshop_sqlserver_uks_name'), '/eshop-sqldatabase-uks/DropIndex')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_eshop_sqlserver_uks_name'), 'eshop-sqldatabase-uks')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_eshop_sqlserver_uks_name'))]"
+            ],
+            "properties": {
+                "autoExecuteValue": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/advisors",
+            "apiVersion": "2014-04-01",
+            "name": "[concat(parameters('servers_eshop_sqlserver_uks_name'), '/eshop-sqldatabase-uks/ForceLastGoodPlan')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_eshop_sqlserver_uks_name'), 'eshop-sqldatabase-uks')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_eshop_sqlserver_uks_name'))]"
+            ],
+            "properties": {
+                "autoExecuteValue": "Enabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/auditingPolicies",
+            "apiVersion": "2014-04-01",
+            "name": "[concat(parameters('servers_eshop_sqlserver_uks_name'), '/eshop-sqldatabase-uks/Default')]",
+            "location": "UK South",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_eshop_sqlserver_uks_name'), 'eshop-sqldatabase-uks')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_eshop_sqlserver_uks_name'))]"
+            ],
+            "properties": {
+                "auditingState": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/auditingSettings",
+            "apiVersion": "2021-02-01-preview",
+            "name": "[concat(parameters('servers_eshop_sqlserver_uks_name'), '/eshop-sqldatabase-uks/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_eshop_sqlserver_uks_name'), 'eshop-sqldatabase-uks')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_eshop_sqlserver_uks_name'))]"
+            ],
+            "properties": {
+                "retentionDays": 0,
+                "isAzureMonitorTargetEnabled": false,
+                "state": "Disabled",
+                "storageAccountSubscriptionId": "00000000-0000-0000-0000-000000000000"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/backupLongTermRetentionPolicies",
+            "apiVersion": "2021-02-01-preview",
+            "name": "[concat(parameters('servers_eshop_sqlserver_uks_name'), '/eshop-sqldatabase-uks/default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_eshop_sqlserver_uks_name'), 'eshop-sqldatabase-uks')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_eshop_sqlserver_uks_name'))]"
+            ],
+            "properties": {
+                "weeklyRetention": "PT0S",
+                "monthlyRetention": "PT0S",
+                "yearlyRetention": "PT0S",
+                "weekOfYear": 0
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/backupShortTermRetentionPolicies",
+            "apiVersion": "2021-02-01-preview",
+            "name": "[concat(parameters('servers_eshop_sqlserver_uks_name'), '/eshop-sqldatabase-uks/default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_eshop_sqlserver_uks_name'), 'eshop-sqldatabase-uks')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_eshop_sqlserver_uks_name'))]"
+            ],
+            "properties": {
+                "retentionDays": 7,
+                "diffBackupIntervalInHours": 12
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/extendedAuditingSettings",
+            "apiVersion": "2021-02-01-preview",
+            "name": "[concat(parameters('servers_eshop_sqlserver_uks_name'), '/eshop-sqldatabase-uks/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_eshop_sqlserver_uks_name'), 'eshop-sqldatabase-uks')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_eshop_sqlserver_uks_name'))]"
+            ],
+            "properties": {
+                "retentionDays": 0,
+                "isAzureMonitorTargetEnabled": false,
+                "state": "Disabled",
+                "storageAccountSubscriptionId": "00000000-0000-0000-0000-000000000000"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/geoBackupPolicies",
+            "apiVersion": "2014-04-01",
+            "name": "[concat(parameters('servers_eshop_sqlserver_uks_name'), '/eshop-sqldatabase-uks/Default')]",
+            "location": "UK South",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_eshop_sqlserver_uks_name'), 'eshop-sqldatabase-uks')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_eshop_sqlserver_uks_name'))]"
+            ],
+            "properties": {
+                "state": "Enabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/ledgerDigestUploads",
+            "apiVersion": "2021-02-01-preview",
+            "name": "[concat(parameters('servers_eshop_sqlserver_uks_name'), '/eshop-sqldatabase-uks/Current')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_eshop_sqlserver_uks_name'), 'eshop-sqldatabase-uks')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_eshop_sqlserver_uks_name'))]"
+            ],
+            "properties": {}
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/securityAlertPolicies",
+            "apiVersion": "2021-02-01-preview",
+            "name": "[concat(parameters('servers_eshop_sqlserver_uks_name'), '/eshop-sqldatabase-uks/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_eshop_sqlserver_uks_name'), 'eshop-sqldatabase-uks')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_eshop_sqlserver_uks_name'))]"
+            ],
+            "properties": {
+                "state": "Disabled",
+                "disabledAlerts": [
+                    ""
+                ],
+                "emailAddresses": [
+                    ""
+                ],
+                "emailAccountAdmins": false,
+                "retentionDays": 0
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/transparentDataEncryption",
+            "apiVersion": "2021-02-01-preview",
+            "name": "[concat(parameters('servers_eshop_sqlserver_uks_name'), '/eshop-sqldatabase-uks/Current')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_eshop_sqlserver_uks_name'), 'eshop-sqldatabase-uks')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_eshop_sqlserver_uks_name'))]"
+            ],
+            "properties": {
+                "state": "Enabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/vulnerabilityAssessments",
+            "apiVersion": "2021-02-01-preview",
+            "name": "[concat(parameters('servers_eshop_sqlserver_uks_name'), '/eshop-sqldatabase-uks/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_eshop_sqlserver_uks_name'), 'eshop-sqldatabase-uks')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_eshop_sqlserver_uks_name'))]"
+            ],
+            "properties": {
+                "recurringScans": {
+                    "isEnabled": false,
+                    "emailSubscriptionAdmins": true,
+                    "emails": []
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/vulnerabilityAssessments",
+            "apiVersion": "2021-02-01-preview",
+            "name": "[concat(parameters('servers_eshop_sqlserver_uks_name'), '/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_eshop_sqlserver_uks_name'))]",
+                "[resourceId('Microsoft.Storage/StorageAccounts', parameters('storageAccounts_sqlvaiw6ij5x6mkuga_name'))]"
+            ],
+            "properties": {
+                "storageContainerPath": "[concat('https://', parameters('storageAccounts_sqlvaiw6ij5x6mkuga_name'), '.blob.core.windows.net/vulnerability-assessment/')]",
+                "recurringScans": {
+                    "isEnabled": true,
+                    "emailSubscriptionAdmins": true,
+                    "emails": []
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
+            "apiVersion": "2021-04-01",
+            "name": "[concat(parameters('storageAccounts_storageaccountshopo8de6_name'), '/default/azure-webjobs-hosts')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts/blobServices', parameters('storageAccounts_storageaccountshopo8de6_name'), 'default')]",
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_storageaccountshopo8de6_name'))]"
+            ],
+            "properties": {
+                "immutableStorageWithVersioning": {
+                    "enabled": false
+                },
+                "defaultEncryptionScope": "$account-encryption-key",
+                "denyEncryptionScopeOverride": false,
+                "publicAccess": "None"
+            }
+        },
+        {
             "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
             "apiVersion": "2021-04-01",
             "name": "[concat(parameters('storageAccounts_storageaccountshopob937_name'), '/default/azure-webjobs-hosts')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Storage/storageAccounts/blobServices', parameters('storageAccounts_storageaccountshopob937_name'), 'default')]",
                 "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_storageaccountshopob937_name'))]"
+            ],
+            "properties": {
+                "immutableStorageWithVersioning": {
+                    "enabled": false
+                },
+                "defaultEncryptionScope": "$account-encryption-key",
+                "denyEncryptionScopeOverride": false,
+                "publicAccess": "None"
+            }
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
+            "apiVersion": "2021-04-01",
+            "name": "[concat(parameters('storageAccounts_storageaccountshopo8de6_name'), '/default/azure-webjobs-secrets')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts/blobServices', parameters('storageAccounts_storageaccountshopo8de6_name'), 'default')]",
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_storageaccountshopo8de6_name'))]"
             ],
             "properties": {
                 "immutableStorageWithVersioning": {
@@ -1454,12 +3175,29 @@
             }
         },
         {
+            "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
+            "apiVersion": "2021-04-01",
+            "name": "[concat(parameters('storageAccounts_sqlvaiw6ij5x6mkuga_name'), '/default/vulnerability-assessment')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts/blobServices', parameters('storageAccounts_sqlvaiw6ij5x6mkuga_name'), 'default')]",
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_sqlvaiw6ij5x6mkuga_name'))]"
+            ],
+            "properties": {
+                "immutableStorageWithVersioning": {
+                    "enabled": false
+                },
+                "defaultEncryptionScope": "$account-encryption-key",
+                "denyEncryptionScopeOverride": false,
+                "publicAccess": "None"
+            }
+        },
+        {
             "type": "Microsoft.Storage/storageAccounts/fileServices/shares",
             "apiVersion": "2021-04-01",
-            "name": "[concat(parameters('storageAccounts_storageaccountshopob937_name'), '/default/eshop-orderitemsreserver-uksb33b')]",
+            "name": "[concat(parameters('storageAccounts_storageaccountshopo8de6_name'), '/default/eshop-deliveryorderprocessor-uksad31')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Storage/storageAccounts/fileServices', parameters('storageAccounts_storageaccountshopob937_name'), 'default')]",
-                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_storageaccountshopob937_name'))]"
+                "[resourceId('Microsoft.Storage/storageAccounts/fileServices', parameters('storageAccounts_storageaccountshopo8de6_name'), 'default')]",
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_storageaccountshopo8de6_name'))]"
             ],
             "properties": {
                 "accessTier": "TransactionOptimized",
@@ -1810,6 +3548,42 @@
                 "siteName": "eshop-web-cus(dev)",
                 "hostNameType": "Verified"
             }
+        },
+        {
+            "type": "Microsoft.Web/sites/slots/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "[concat(parameters('sites_eshop_public_api_uks_name'), '/dev/2021-10-13T14_12_51_9244058')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites/slots', parameters('sites_eshop_public_api_uks_name'), 'dev')]",
+                "[resourceId('Microsoft.Web/sites', parameters('sites_eshop_public_api_uks_name'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/slots/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "[concat(parameters('sites_eshop_web_cus_name'), '/dev/2021-10-13T14_29_33_5307909')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites/slots', parameters('sites_eshop_web_cus_name'), 'dev')]",
+                "[resourceId('Microsoft.Web/sites', parameters('sites_eshop_web_cus_name'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/slots/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "[concat(parameters('sites_eshop_public_api_uks_name'), '/dev/2021-10-13T15_12_52_0039039')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites/slots', parameters('sites_eshop_public_api_uks_name'), 'dev')]",
+                "[resourceId('Microsoft.Web/sites', parameters('sites_eshop_public_api_uks_name'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/slots/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "[concat(parameters('sites_eshop_web_cus_name'), '/dev/2021-10-13T15_29_33_6848979')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites/slots', parameters('sites_eshop_web_cus_name'), 'dev')]",
+                "[resourceId('Microsoft.Web/sites', parameters('sites_eshop_web_cus_name'))]"
+            ]
         }
     ]
 }

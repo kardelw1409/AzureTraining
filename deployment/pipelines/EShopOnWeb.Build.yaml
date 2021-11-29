@@ -1,0 +1,80 @@
+trigger:
+  - master
+
+pool:
+  vmImage: windows-2019
+
+variables:
+  BuildPlatform: any cpu
+  BuildConfiguration: release
+  System.Debug: true
+
+steps:
+  - task: NuGetToolInstaller@1
+
+  - task: NuGetAuthenticate@0
+
+  - task: NuGetCommand@2
+    displayName: "NuGet restore"
+    inputs:
+      command: "restore"
+      restoreSolution: "**/*.sln"
+      feedsToUse: "config"
+
+  - task: VSBuild@1
+    displayName: "Build solution eShopOnWeb.sln"
+    inputs:
+      solution: '**\*.sln'
+      platform: $(BuildPlatform)
+      configuration: $(BuildConfiguration)
+
+  - task: ArchiveFiles@2
+    displayName: "Archive Web files"
+    inputs:
+      rootFolderOrFile: 'src\Web\bin\Release\net5.0\'
+      includeRootFolder: false
+      archiveFile: "$(Build.ArtifactStagingDirectory)/Web.zip"
+
+  - task: PublishBuildArtifacts@1
+    displayName: "Publish Artifact: web-api"
+    inputs:
+      PathtoPublish: "$(Build.ArtifactStagingDirectory)/Web.zip"
+      ArtifactName: "web-api"
+
+  - task: ArchiveFiles@2
+    displayName: "Archive Public Api files"
+    inputs:
+      rootFolderOrFile: 'src\PublicApi\bin\Release\net5.0\'
+      includeRootFolder: false
+      archiveFile: "$(Build.ArtifactStagingDirectory)/PublicApi.zip"
+
+  - task: PublishBuildArtifacts@1
+    displayName: "Publish Artifact: public-api"
+    inputs:
+      PathtoPublish: "$(Build.ArtifactStagingDirectory)/PublicApi.zip"
+      ArtifactName: "public-api"
+
+  - task: CopyFiles@2
+    displayName: "Copy scripts"
+    inputs:
+      SourceFolder: deployment/scripts
+      TargetFolder: $(Build.ArtifactStagingDirectory)/scripts
+      CleanTargetFolder: true
+
+  - task: PublishBuildArtifacts@1
+    displayName: "Publish Artifact: scripts"
+    inputs:
+      PathtoPublish: $(Build.ArtifactStagingDirectory)/scripts
+      ArtifactName: scripts
+
+  - task: CopyFiles@2
+    displayName: 'Copy Terraform files'
+    inputs:
+      SourceFolder: deployment/terraform
+      TargetFolder: Terraform
+
+  - task: PublishBuildArtifacts@1
+    displayName: 'Publish Artifact: terraform'
+    inputs:
+      PathtoPublish: Terraform
+      ArtifactName: terraform
